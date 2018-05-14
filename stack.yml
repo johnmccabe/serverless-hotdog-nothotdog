@@ -3,8 +3,8 @@ provider:
   gateway: http://localhost:8080
 
 functions:
-  inception:
+  hotdog-classifier:
     lang: dockerfile
-    handler: ./function
-    image: alexellis/inception:2.1
+    handler: ./hotdog-classifier
+    image: johnmccabe/hotdognothotdog:0.6
 
