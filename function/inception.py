@@ -17,6 +17,7 @@ import download
 from cache import cache
 import os
 import sys
+import base64
 
 ########################################################################
 # Various directories and file-names.
@@ -567,9 +568,11 @@ def invoke(body):
     # Load the Inception model so it is ready for classifying images.
     model = Inception()
 
-    image_path = download.maybe_download(body, data_dir)
-    # Path for a jpeg-image that is included in the downloaded data.
-    # image_path = os.path.join(data_dir, 'cropped_panda.jpg')
+    filename = "hotdog.png"
+    image_path = os.path.join(data_dir, filename)
+    file = open(image_path, 'wb')
+    file.write(base64.b64decode(body))
+    file.close()
 
     # Use the Inception model to classify the image.
     pred = model.classify(image_path=image_path)
