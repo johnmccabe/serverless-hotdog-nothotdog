@@ -5,7 +5,8 @@ import sys
 #from function import handler
 import inception
 def get_stdin():
-    return sys.stdin.buffer.read()
+    data = sys.stdin.buffer.read()
+    return data
 
 if(__name__ == "__main__"):
     st = get_stdin()
