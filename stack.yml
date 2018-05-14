@@ -11,7 +11,7 @@ functions:
   hotdog-app:
     lang: go
     handler: ./hotdog-app
-    image: johnmccabe/hotdogapp:0.1
+    image: johnmccabe/hotdogapp:0.2
     environment:
-      classifier-url: /hotdog-classifier
-      classifier-entity: hotdog
+      classifier_url: /hotdog-classifier
+      classifier_entity: hotdog
