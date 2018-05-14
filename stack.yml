@@ -6,5 +6,12 @@ functions:
   hotdog-classifier:
     lang: dockerfile
     handler: ./hotdog-classifier
-    image: johnmccabe/hotdognothotdog:0.6
+    image: johnmccabe/hotdogclassifier:0.1
 
+  hotdog-app:
+    lang: go
+    handler: ./hotdog-app
+    image: johnmccabe/hotdogapp:0.1
+    environment:
+      classifier-url: /function/hotdog-classifier
+      classifier-entity: hotdog
