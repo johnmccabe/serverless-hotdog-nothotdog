@@ -1,0 +1,254 @@
+<html>
+<head>
+    <title>Serverless Hotdog Not-Hotdog</title>
+    <style>
+        html,
+        body,
+        .centered {
+            height: 100%;
+        }
+
+        .centered {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .background-message {
+            position: absolute;
+            width: 100%;
+            background-color: #F5F5F5;
+            color: grey;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            z-index: -1000;
+        }
+
+        #demo {
+            background-color: red;
+            z-index: 50;
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            margin: auto;
+        }
+
+        .dog {
+            width: 100%;
+            box-sizing: content-box;
+            text-align: center;
+            font-size: 6vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: bold;
+            color: white;
+            -webkit-text-stroke: .3vh black;
+            z-index: 100;
+            background-color: springgreen;
+        }
+
+        .hotdog {
+            position: absolute;
+            background-color: springgreen;
+            padding-top: 10px;
+        }
+
+        .nothotdog {
+            bottom: 0%;
+            position: fixed;
+            background-color: orangered;
+            padding-bottom: 20px;
+        }
+
+        .checkmark {
+            -webkit-text-stroke: .1vw black;
+        }
+
+        .parent {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+        }
+
+        .center-img {
+            position: absolute;
+            top: -9999px;
+            bottom: -9999px;
+            left: -9999px;
+            right: -9999px;
+            margin: auto;
+            min-height: 100%;
+            min-width: 100%;
+        }
+
+        #info {
+            z-index: 700;
+            position: absolute;
+            font-size: 3vw;
+            color: white;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 500;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid blue;
+            border-right: 16px solid green;
+            border-bottom: 16px solid red;
+            border-left: 16px solid pink;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</head>
+
+<body scroll="no" style="overflow: hidden; margin:0;">
+    <div class="background-message centered">Chrome on Android/OSX only.</div>
+
+    <div class="dog hotdog" hidden>{{.Entity| safeJSStr}}</br>
+        <div class="checkmark">&#x2714;</div>
+    </div>
+    <div class="dog nothotdog" hidden>
+        <div class="checkmark">&#x2718;</div>
+        Not {{.Entity| safeJSStr}}
+    </div>
+    <div id="loader" hidden></div>
+    <div id="info">Serverless {{.Entity| safeJSStr}} by @johnmccabe</div>
+
+    <div class="demo-wrapper">
+        <div class="parent">
+            <video id="video" class="center-img" height="100%" autoplay=""></video>
+        </div>
+        <canvas hidden id="canvas"></canvas>
+        <div id="demo" hidden></div>
+        <script>
+
+            var hotdogBanner = document.querySelector(".hotdog");
+            var nothotdogBanner = document.querySelector(".nothotdog");
+            var loader = document.getElementById("loader");
+            function loadDoc(imgType, imgData) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var jsonResponse = xhttp.response;
+                        var tophit = jsonResponse[0].name
+                        console.log(tophit);
+                        loader.hidden = true;
+                        if (tophit.trim() === "{{.Entity| safeJSStr}}") {
+                            hotdogBanner.hidden = false;
+                        } else {
+                            nothotdogBanner.hidden = false;
+                        }
+                    }
+                };
+                xhttp.open("POST", "{{.URL | safeURL}}", true);
+                xhttp.responseType = 'json';
+                xhttp.setRequestHeader("Content-type", imgType)
+                xhttp.send(imgData);
+            }
+        </script>
+
+        <script>
+            window.addEventListener("DOMContentLoaded", function () {
+                var video = document.getElementById('video');
+                var mediaConfig = { video: { facingMode: "environment" } };
+                var errBack = function (e) {
+                    console.log('An error has occurred!', e)
+                };
+
+                // Start camera stream
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia(mediaConfig).then(function (stream) {
+                        video.src = window.URL.createObjectURL(stream);
+                        video.play();
+                    });
+                }
+                else if (navigator.getUserMedia) { // Standard
+                    navigator.getUserMedia(mediaConfig, function (stream) {
+                        video.src = stream;
+                        video.play();
+                    }, errBack);
+                } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+                    navigator.webkitGetUserMedia(mediaConfig, function (stream) {
+                        video.src = window.webkitURL.createObjectURL(stream);
+                        video.play();
+                    }, errBack);
+                } else if (navigator.mozGetUserMedia) { // Mozilla-prefixed
+                    navigator.mozGetUserMedia(mediaConfig, function (stream) {
+                        video.src = window.URL.createObjectURL(stream);
+                        video.play();
+                    }, errBack);
+                }
+
+                // Trigger hide demo div
+                document.getElementById('demo').addEventListener('click', function () {
+                    var demo = document.getElementById('demo');
+                    demo.hidden = true;
+                    hotdogBanner.hidden = true;
+                    nothotdogBanner.hidden = true;
+                    loader.hidden = true;
+                });
+
+                // Trigger taking a photo
+                document.getElementById('video').addEventListener('click', function () {
+                    s = window.getComputedStyle(document.getElementById('video'));
+                    ww = window.innerWidth;
+                    wh = window.innerHeight;
+
+                    var canvas = document.getElementById('canvas');
+                    canvas.width = parseInt(s.width, 10);
+                    canvas.height = parseInt(s.height, 10);
+                    var context = canvas.getContext('2d');
+                    context.drawImage(video, 0, 0, parseInt(s.width, 10), parseInt(s.height, 10));
+                    snapshot = canvas.toDataURL('image/jpeg');
+                    var i = snapshot.split(',');
+                    var t = i[0].split(":");
+
+                    var demo = document.getElementById('demo');
+                    demo.width = parseInt(s.width, 10) / 4;
+                    demo.height = parseInt(s.height, 10) / 4;
+                    demo.width = s.width;
+                    demo.height = s.height;
+                    demo.style.marginLeft = - (parseInt(s.width, 10) - ww) / 2;
+                    demo.hidden = false;
+
+                    loader.hidden = false;
+                    document.getElementById('demo').style.backgroundImage = "url('" + snapshot + "')";
+                    loadDoc(t[1], i[1]);
+                });
+            }, false);
+        </script>
+    </div>
+</body>
+</html>
