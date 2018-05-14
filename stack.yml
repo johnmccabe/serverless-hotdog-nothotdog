@@ -3,10 +3,10 @@ provider:
   gateway: http://localhost:8080
 
 functions:
-  hotdog-classifier:
-    lang: dockerfile
-    handler: ./hotdog-classifier
-    image: johnmccabe/hotdogclassifier:0.1
+  # hotdog-classifier:
+  #   lang: dockerfile
+  #   handler: ./hotdog-classifier
+  #   image: johnmccabe/hotdogclassifier:0.1
 
   hotdog-app:
     lang: go
