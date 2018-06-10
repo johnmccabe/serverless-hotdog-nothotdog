@@ -134,7 +134,14 @@
 </head>
 
 <body scroll="no" style="overflow: hidden; margin:0;">
-    <div class="background-message centered">Chrome on Android/OSX only.</div>
+    <div class="background-message centered">
+        <p>Verified working on the following browers/OS combinations:</p>
+        <ul>
+        <li>Safari - iOS 11.3, OSX 10.13</li>
+        <li>Chrome - OSX 10.13, Android 9</li>
+        </ul>
+        <p>If you're unable to get it working your your browser/OS combination let me know <a href="https://github.com/johnmccabe/serverless-hotdog-nothotdog">here</a>.</p>
+    </div>
 
     <div class="dog hotdog" hidden>{{.Entity| safeJSStr}}</br>
         <div class="checkmark">&#x2714;</div>
@@ -148,7 +155,7 @@
 
     <div class="demo-wrapper">
         <div class="parent">
-            <video id="video" class="center-img" height="100%" autoplay=""></video>
+            <video id="video" class="center-img" height="100%" autoplay playsinline></video>
         </div>
         <canvas hidden id="canvas"></canvas>
         <div id="demo" hidden></div>
@@ -182,7 +189,7 @@
         <script>
             window.addEventListener("DOMContentLoaded", function () {
                 var video = document.getElementById('video');
-                var facingMode = "environment";
+                var facingMode = 'environment';
                 var constraints = {
                     audio: false,
                     video: {
@@ -196,25 +203,9 @@
                 // Start camera stream
                 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                     navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-                        video.src = window.URL.createObjectURL(stream);
-                        video.play();
+                        video.srcObject = stream;
+                        //video.play();
                     });
-                }
-                else if (navigator.getUserMedia) { // Standard
-                    navigator.getUserMedia(constraints, function (stream) {
-                        video.src = stream;
-                        video.play();
-                    }, errBack);
-                } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
-                    navigator.webkitGetUserMedia(constraints, function (stream) {
-                        video.src = window.webkitURL.createObjectURL(stream);
-                        video.play();
-                    }, errBack);
-                } else if (navigator.mozGetUserMedia) { // Mozilla-prefixed
-                    navigator.mozGetUserMedia(constraints, function (stream) {
-                        video.src = window.URL.createObjectURL(stream);
-                        video.play();
-                    }, errBack);
                 }
 
                 // Trigger hide demo div
