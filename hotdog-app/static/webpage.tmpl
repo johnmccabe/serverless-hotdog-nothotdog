@@ -135,12 +135,14 @@
 
 <body scroll="no" style="overflow: hidden; margin:0;">
     <div class="background-message centered">
-        <p>Verified working on the following browers/OS combinations:</p>
-        <ul>
-        <li>Safari - iOS 11.3, OSX 10.13</li>
-        <li>Chrome - OSX 10.13, Android 9</li>
-        </ul>
-        <p>If you're unable to get it working your your browser/OS combination let me know <a href="https://github.com/johnmccabe/serverless-hotdog-nothotdog">here</a>.</p>
+        <div>
+            <p>Verified working on the following browers/OS combinations:</p>
+                <ul>
+                    <li>Safari - iOS 11.3, OSX 10.13</li>
+                    <li>Chrome - OSX 10.13, Android 9</li>
+                </ul>
+            <p>If you're unable to get it working your your browser/OS combination let me know <a href="https://github.com/johnmccabe/serverless-hotdog-nothotdog">here</a>.</p>
+        </div>
     </div>
 
     <div class="dog hotdog" hidden>{{.Entity| safeJSStr}}</br>
