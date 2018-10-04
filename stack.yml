@@ -13,5 +13,5 @@ functions:
     handler: ./hotdog-app
     image: johnmccabe/hotdogapp:0.2
     environment:
-      classifier_url: /hotdog-classifier
+      classifier_url: https://johnmccabe.get-faas.com/hotdog-classifier
       classifier_entity: hotdog
