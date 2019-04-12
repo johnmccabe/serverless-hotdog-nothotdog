@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:1.8.0
+FROM tensorflow/tensorflow:latest
 
 RUN apt-get update -qy \
  && apt-get install -qy \
