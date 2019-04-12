@@ -1,8 +1,9 @@
-FROM tensorflow/tensorflow:latest
+FROM tensorflow/tensorflow:1.8.0
 
 RUN apt-get update -qy \
  && apt-get install -qy \
-       python3-pip
+       python3-pip \
+       curl
 RUN curl -sSL https://github.com/openfaas/faas/releases/download/0.7.0/fwatchdog > /usr/bin/fwatchdog \
     && chmod +x /usr/bin/fwatchdog
 

@@ -3,16 +3,16 @@ provider:
   gateway: http://localhost:8080
 
 functions:
-  # hotdog-classifier:
-  #   lang: dockerfile
-  #   handler: ./hotdog-classifier
-  #   image: johnmccabe/hotdogclassifier:0.1
-  #   
+  hotdog-classifier:
+    lang: dockerfile
+    handler: ./hotdog-classifier
+    image: johnmccabe/hotdogclassifier:0.1
+    
 
   hotdog-app:
     lang: go
     handler: ./hotdog-app
     image: johnmccabe/hotdogapp:0.2
     environment:
-      classifier_url: https://openfaas.gke.h4k.io/function/hotdog-classifier
+      classifier_url: https://fg8.space/function/hotdog-classifier
       classifier_entity: hotdog
